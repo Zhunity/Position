@@ -18,7 +18,12 @@ public class Position : MonoBehaviour
     
   
     public Vector2 sub;
+    public Vector2 guess;
     public Vector2 anchorSub;
+    public Vector2 cAndPLocalSub;    // 父节点localPosition与子localPosition的插值
+    public Vector2 cAndPAnchoredSub;    // 父节点localPosition与子localPosition的插值
+    public Vector2 parentPivot;
+
     private void Update()
     {
         position = transform.position;
@@ -27,34 +32,52 @@ public class Position : MonoBehaviour
         anchoredPosition3D = rect.anchoredPosition3D;
 
         sub = new Vector2(
-            (anchoredPosition3D.x - localPosition.x) / rect.rect.size.x,
-            (anchoredPosition3D.y - localPosition.y) / rect.rect.size.y);
-        
+            (anchoredPosition3D.x - localPosition.x),
+            (anchoredPosition3D.y - localPosition.y));
+
+       
         
         anchorSub = new Vector2(
-            (0.5f - (rect.anchorMax.x + rect.anchorMin.x) / 2),// + (0.5f - (rect.anchorMax.x - rect.anchorMin.x) * rect.pivot.x),
+            (0.5f - (rect.anchorMax.x + rect.anchorMin.x) / 2),                                 // + (0.5f - (rect.anchorMax.x - rect.anchorMin.x) * rect.pivot.x),
             (0.5f - (rect.anchorMax.y + rect.anchorMin.y) / 2f));
-        //(0.5f - rect.pivot.x) * rect.rect.size.x,
-        //(0.5f - rect.pivot.y) * rect.rect.size.y,
-        //0f);
-        //parentPivot = transform.parent.GetComponent<RectTransform>().pivot;
-        //pivot = rect.pivot;
+
+
+        parentPivot = GetParentPivot();
+
+        guess = anchorSub + parentPivot;
     }
 
-    Vector3 GetWidgetWorldPoint(RectTransform target)
+    private Vector2 GetParentPivot()
     {
-        //pivot position + item size has to be included
-        var pivotOffset = new Vector3(
-            (0.5f - target.pivot.x) * target.rect.size.x,
-            (0.5f - target.pivot.y) * target.rect.size.y,
-            0f);
-        var localPosition = target.localPosition + pivotOffset;
-        return target.parent.TransformPoint(localPosition);
-    }
+        RectTransform parent = rect.parent as RectTransform;
+        cAndPLocalSub = new Vector2(
+          (0.5f - rect.pivot.x) * rect.rect.size.x - (0.5f - parent.pivot.x) * parent.rect.size.x,
+          (0.5f - rect.pivot.y) * rect.rect.size.y - (0.5f - parent.pivot.y) * parent.rect.size.y
+          );
 
-    Vector3 GetWorldPointInWidget(RectTransform target, Vector3 worldPoint)
-    {
-        return target.InverseTransformPoint(worldPoint);
+        float x = 0;
+        if (parent.pivot.x == 0.5f)
+        {
+            x = 0;
+        }
+        else
+        {
+            x = (rect.pivot.x - 0.5f) * rect.rect.size.x;
+        }
+
+        float y = 0;
+        if (parent.pivot.y == 0.5f)
+        {
+            y = 0;
+        }
+        else
+        {
+            y = (rect.pivot.y - 0.5f) * rect.rect.size.y;
+        }
+        cAndPAnchoredSub = new Vector2(
+            x, y
+            );
+        return cAndPAnchoredSub + cAndPLocalSub;
     }
 
     void PositionAndLocalPosition()
