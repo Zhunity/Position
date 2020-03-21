@@ -19,10 +19,11 @@ public class Position : MonoBehaviour
   
     public Vector2 sub;
     public Vector2 guess;
-    public Vector2 anchorSub;
-    public Vector2 cAndPLocalSub;    // 父节点localPosition与子localPosition的插值
-    public Vector2 cAndPAnchoredSub;    // 父节点localPosition与子localPosition的插值
-    public Vector2 parentPivot;
+	private Vector2 anchorSub;
+    private Vector2 cAndPLocalSub;    // 父节点localPosition与子localPosition的插值
+    private Vector2 cAndPAnchoredSub;    // 父节点localPosition与子localPosition的插值
+	private Vector2 parentPivot; // 因父节点pivot修改导致的子节点localPosition与anchoredPosition间的转换插值
+	public Vector2 selfPivot; // 因自己pivot修改导致的变化
 
     private void Update()
     {
@@ -38,13 +39,18 @@ public class Position : MonoBehaviour
        
         
         anchorSub = new Vector2(
-            (0.5f - (rect.anchorMax.x + rect.anchorMin.x) / 2),                                 // + (0.5f - (rect.anchorMax.x - rect.anchorMin.x) * rect.pivot.x),
-            (0.5f - (rect.anchorMax.y + rect.anchorMin.y) / 2f));
+            (0.5f - (rect.anchorMax.x + rect.anchorMin.x) / 2) * rect.rect.size.x , 
+            (0.5f - (rect.anchorMax.y + rect.anchorMin.y) / 2f) * rect.rect.size.y);
 
 
         parentPivot = GetParentPivot();
 
-        guess = anchorSub + parentPivot;
+		selfPivot = new Vector2(
+			((rect.anchorMax.x - rect.anchorMin.x) * (0.5f - rect.pivot.x)) * rect.rect.size.x,
+			((rect.anchorMax.y - rect.anchorMin.y) * (0.5f - rect.pivot.y)) * rect.rect.size.y
+			);
+
+		guess = anchorSub + parentPivot + selfPivot;
     }
 
     private Vector2 GetParentPivot()
@@ -55,28 +61,10 @@ public class Position : MonoBehaviour
           (0.5f - rect.pivot.y) * rect.rect.size.y - (0.5f - parent.pivot.y) * parent.rect.size.y
           );
 
-        float x = 0;
-        if (parent.pivot.x == 0.5f)
-        {
-            x = 0;
-        }
-        else
-        {
-            x = (rect.pivot.x - 0.5f) * rect.rect.size.x;
-        }
-
-        float y = 0;
-        if (parent.pivot.y == 0.5f)
-        {
-            y = 0;
-        }
-        else
-        {
-            y = (rect.pivot.y - 0.5f) * rect.rect.size.y;
-        }
         cAndPAnchoredSub = new Vector2(
-            x, y
-            );
+			(rect.pivot.x - 0.5f) * rect.rect.size.x,
+			(rect.pivot.y - 0.5f) * rect.rect.size.y
+			);
         return cAndPAnchoredSub + cAndPLocalSub;
     }
 
