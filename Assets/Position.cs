@@ -11,19 +11,19 @@ public class Position : MonoBehaviour
         rect = GetComponent<RectTransform>();
     }
 
-	public Vector3 position;
-	public Vector2 anchoredPosition;
+	private Vector3 position;
+	private Vector2 anchoredPosition;
 	public Vector3 anchoredPosition3D;
 	public Vector3 localPosition;
 	public Vector2 sub;
 	public Vector2 guess;
 
 
-	private Vector2 anchorSub;
-    private Vector2 cAndPLocalSub;    // 父节点localPosition与子localPosition的插值
-    private Vector2 cAndPAnchoredSub;    // 父节点localPosition与子localPosition的插值
-	private Vector2 parentPivot; // 因父节点pivot修改导致的子节点localPosition与anchoredPosition间的转换插值
-	private Vector2 selfPivot; // 因自己pivot修改导致的变化
+	public Vector2 anchorSub;
+	private Vector2 cAndPLocalSub;    // 父节点localPosition与子localPosition的插值
+	private Vector2 cAndPAnchoredSub;    // 父节点localPosition与子localPosition的插值
+	public Vector2 parentPivot; // 因父节点pivot修改导致的子节点localPosition与anchoredPosition间的转换插值
+	public Vector2 selfPivot; // 因自己pivot修改导致的变化
 
 	private Vector2 RectSize;
 	private Vector2 offsetMax;
@@ -82,7 +82,7 @@ public class Position : MonoBehaviour
 
 	private Vector2 GetSize(RectTransform r)
 	{
-		return r.rect.size;// - rect.offsetMax + rect.offsetMin;
+		return r.rect.size - r.offsetMax + r.offsetMin;
 	}
 
     void PositionAndLocalPosition()
