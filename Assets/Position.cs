@@ -57,8 +57,8 @@ public class Position : MonoBehaviour
     public Vector2 Offset;
 
 	private Vector2 RectSize;
-	private Vector2 offsetMax;
-	private Vector2 offsetMin;
+    public Vector2 offsetMax;
+    public Vector2 offsetMin;
 	private Vector2 ofssetToSize;
 	private Vector2 sizeDelta;
 
@@ -87,7 +87,7 @@ public class Position : MonoBehaviour
 			((rect.anchorMax.y - rect.anchorMin.y) * (0.5f - rect.pivot.y)) * rect.rect.size.y
 			);
 
-        Offset = (( - Vector2.Scale(rect.sizeDelta, Vector2.one - rect.pivot)) + ( Vector2.Scale(rect.sizeDelta, rect.pivot))) / 2;
+        Offset = GetOffset();
 
 
         guess = anchorSub + parentPivot + selfPivot + Offset;
@@ -112,6 +112,14 @@ public class Position : MonoBehaviour
 		 (rect.pivot.y - 0.5f) * rect.rect.size.y
 		 );
 		return cAndPAnchoredSub + cAndPLocalSub;
+    }
+
+    private Vector2 GetOffset()
+    {
+        // 其实这两个相同
+        //Vector2 newAnchor = ((rect.offsetMin - Vector2.Scale(rect.sizeDelta, Vector2.one - rect.pivot)) + (rect.offsetMin +  Vector2.Scale(rect.sizeDelta, rect.pivot))) / 2;
+        Vector2 newAnchor = Vector2.zero;//-Vector2.Scale(rect.sizeDelta, rect.pivot) + Vector2.Scale(rect.sizeDelta, Vector2.one - rect.pivot);
+        return newAnchor;
     }
 
 	private Vector2 GetSize(RectTransform r)
