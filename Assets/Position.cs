@@ -54,6 +54,7 @@ public class Position : MonoBehaviour
 	private Vector2 cAndPAnchoredSub;    // 父节点localPosition与子localPosition的插值
 	public Vector2 parentPivot; // 因父节点pivot修改导致的子节点localPosition与anchoredPosition间的转换插值
 	public Vector2 selfPivot; // 因自己pivot修改导致的变化
+    public Vector2 Offset;
 
 	private Vector2 RectSize;
 	private Vector2 offsetMax;
@@ -75,7 +76,7 @@ public class Position : MonoBehaviour
        
         
         anchorSub = new Vector2(
-            (0.5f - (rect.anchorMax.x + rect.anchorMin.x) / 2) * rect.rect.size.x , 
+            (0.5f - (rect.anchorMax.x + rect.anchorMin.x) / 2f) * rect.rect.size.x , 
             (0.5f - (rect.anchorMax.y + rect.anchorMin.y) / 2f) * rect.rect.size.y);
 
 
@@ -86,10 +87,10 @@ public class Position : MonoBehaviour
 			((rect.anchorMax.y - rect.anchorMin.y) * (0.5f - rect.pivot.y)) * rect.rect.size.y
 			);
 
-        Vector2 offset = Vector2.zero;// -(rect.offsetMax - Vector2.Scale(rect.sizeDelta, Vector2.one - rect.pivot)) + (rect.offsetMin + Vector2.Scale(rect.sizeDelta, rect.pivot));
+        Offset = (( - Vector2.Scale(rect.sizeDelta, Vector2.one - rect.pivot)) + ( Vector2.Scale(rect.sizeDelta, rect.pivot))) / 2;
 
 
-        guess = anchorSub + parentPivot + selfPivot + offset;
+        guess = anchorSub + parentPivot + selfPivot + Offset;
 
 		RectSize = rect.rect.size;
 		offsetMax = rect.offsetMax;
