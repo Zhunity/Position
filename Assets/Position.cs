@@ -9,7 +9,37 @@ public class Position : MonoBehaviour
     void Start()
     {
         rect = GetComponent<RectTransform>();
+        TestMin(new Vector2(1, 2));
     }
+
+    //public Vector2 offsetMin
+    //{
+    //    get
+    //    {
+    //        return anchoredPosition - Vector2.Scale(sizeDelta, pivot);
+    //    }
+    //    set
+    //    {
+    //        Vector2 offset = value - (anchoredPosition - Vector2.Scale(sizeDelta, pivot));
+    //        sizeDelta -= offset;
+    //        anchoredPosition += Vector2.Scale(offset, Vector2.one - pivot);
+    //    }
+    //}
+
+    void TestMin(Vector2 value)
+    {
+        Vector2 anchoredPosition = rect.anchoredPosition;
+        Vector2 sizeDelta = rect.sizeDelta;
+
+        Vector2 offset = value - (anchoredPosition - Vector2.Scale(sizeDelta, rect.pivot));
+        sizeDelta -= offset;
+
+        anchoredPosition += Vector2.Scale(offset, Vector2.one - rect.pivot);
+
+        var offsetMin = anchoredPosition - Vector2.Scale(sizeDelta, rect.pivot);
+        Debug.Log(value + "  " + offsetMin);
+    }
+
 
 	private Vector3 position;
 	private Vector2 anchoredPosition;
@@ -56,7 +86,10 @@ public class Position : MonoBehaviour
 			((rect.anchorMax.y - rect.anchorMin.y) * (0.5f - rect.pivot.y)) * rect.rect.size.y
 			);
 
-		guess = anchorSub + parentPivot + selfPivot;
+        Vector2 offset = Vector2.zero;// -(rect.offsetMax - Vector2.Scale(rect.sizeDelta, Vector2.one - rect.pivot)) + (rect.offsetMin + Vector2.Scale(rect.sizeDelta, rect.pivot));
+
+
+        guess = anchorSub + parentPivot + selfPivot + offset;
 
 		RectSize = rect.rect.size;
 		offsetMax = rect.offsetMax;
@@ -82,7 +115,7 @@ public class Position : MonoBehaviour
 
 	private Vector2 GetSize(RectTransform r)
 	{
-		return r.rect.size - r.offsetMax + r.offsetMin;
+        return r.rect.size;
 	}
 
     void PositionAndLocalPosition()
