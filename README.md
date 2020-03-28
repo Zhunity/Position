@@ -1,14 +1,8 @@
-1、rect.rect,size和rect.sizeDelta的关系
-2、scale
-3、localPosition计算
+Unity进阶技巧 - RectTransform详解
 https://www.jianshu.com/p/dbefa746e50d
 
+localPosition与anchoredPosition转化之瞎猫找死耗子
+https://zhuanlan.zhihu.com/p/114829066
 
-
-
-
-sizeDelta = offsetMx - offsetMin
-
-anchorMinPos = parentRect.min + Vector2.Scale(anchorMin, parentRect.size)
-rectMinPos = rect.min + localPosition(TODO 不是localPosition,是pivot位置)
-offset = rectMinPos - anchorMinPos
+localPosition与anchoredPosition转化
+https://zhuanlan.zhihu.com/p/119442308
