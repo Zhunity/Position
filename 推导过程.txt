@@ -1,0 +1,17 @@
+sizeDelta = (rectMaxPos - rectMinPos) - (anchorMaxPos - anchorMinPos)
+               = ((rect.rect.max + localPosition2D) - (rect.rect.min + localPosition2D)) - (anchorMaxPos - anchorMinPos)
+               = (rect.rect.max - rect.rect.min) - (anchorMaxPos - anchorMinPos)			// (1)约去localPosition2D
+               = rect.rect.size - (anchorMaxPos - anchorMinPos)                				 // (2)即使代入公式，还是得到ui自身长度
+               = rect.rect.size - ((parentRect.rect.max - (Vector2.one - rect.anchorMax） * parentRect.rect.size) - (parentRect.rect.min + rect.anchorMin * parentRect.rect.size))
+         		// (3) 代入之后好长，下面把后面的括号都去掉
+               = rect.rect.size -（parentRect.rect.max - parentRect.rect.size + rect.anchorMax * parentRect.rect.size - parentRect.rect.min - rect.anchorMin * parentRect.rect.size)
+		// (4)下面进行移项
+               = rect.rect.size -((parentRect.rect.max  - parentRect.rect.min)  - parentRect.rect.size + (rect.anchorMax * parentRect.rect.size - rect.anchorMin * parentRect.rect.size))
+		// (5)又看到了最大减最小等于长度，然后发现后面再减一个长度，正好等于0约掉，最后两个提取公因式
+               = rect.rect.size -(rect.anchorMax - rect.anchorMin） * parentRect.rect.size)   // （6）这个时候，就可以看到sizeDelta 的具体计算方式了
+
+
+anchoredPosition	= offsetMin + Vector2.Scale(sizeDelta, rect.pivot)
+		= (rect.rect.min + localPosition2D - parentRect.rect.min -  rect.anchorMin * parentRect.rect.size）+ （rect.rect.size -(rect.anchorMax - rect.anchorMin） * parentRect.rect.size) * rect.pivot
+		= localPosition2D + （rect.rect.min + rect.rect.size * rect.pivot)  - ( parentRect.rect.min +  rect.anchorMin * parentRect.rect.size + (rect.anchorMax - rect.anchorMin） * parentRect.rect.size * rect.pivot)
+ 		= localPosition2D + pivotPos -
