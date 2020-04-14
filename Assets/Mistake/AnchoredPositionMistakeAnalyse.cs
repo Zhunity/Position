@@ -2,25 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MistakeAnlayse : MonoBehaviour
+public class AnchoredPositionMistakeAnalyse : MistakeAnalyse
 {
-	RectTransform rect;
-	RectTransform parentRect;
 
-	public Vector2 anchoredPosition;
 	public Vector2 getBySizeDelta;
-	public Vector2 result;
 
-	void Start()
-    {
-		rect = GetComponent<RectTransform>();
-		parentRect = transform.parent.GetComponent<RectTransform>();
-	}
 
     // Update is called once per frame
     void Update()
     {
-		anchoredPosition = rect.anchoredPosition;
+		origin = rect.anchoredPosition;
 		getBySizeDelta = GetAnchoredPositionBySizeDelta();
 		result = GetAnchoredPositionByLocalPosition();
 	}
