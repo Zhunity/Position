@@ -540,8 +540,8 @@ MonoBehaviour:
   self: {fileID: 1704644212}
   anchor: {fileID: 542166244}
   sizeDelta: {fileID: 2067783055}
-  AnchorMax: {x: 0, y: 0}
-  AnchorMin: {x: 0, y: 0}
+  AnchorMax: {x: 1, y: 1}
+  AnchorMin: {x: 0.5, y: 0.5}
   Pivot: {x: 0.5, y: 0.5}
   anchorPosition: {x: 0, y: 0, z: 0}
   reuslt: {x: 0, y: 0, z: 0}
