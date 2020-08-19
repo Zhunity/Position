@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class GeometricTest : MonoBehaviour
 {
-
+	public RectTransform parent;
+	public RectTransform self;
 	public RectTransform anchor;
 	public RectTransform sizeDelta;
 
-	private RectTransform self;
+	
 
-	void Start()
-	{
-		self = GetComponent<RectTransform>();
-	}
 
 	public Vector3 anchorPosition;
 	public Vector3 reuslt;
@@ -21,7 +18,6 @@ public class GeometricTest : MonoBehaviour
     void Update()
     {
 		anchorPosition = self.anchoredPosition;
-
-
+		reuslt = self.position- anchor.position;
 	}
 }
