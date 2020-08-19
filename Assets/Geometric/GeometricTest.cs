@@ -22,8 +22,6 @@ public class GeometricTest : MonoBehaviour
 
 	private void OnValidate()
 	{
-		//self.pivot = Pivot;
-		//anchor.pivot = Pivot;
 		SetPivotSmart(self, Pivot.x, 0, true, false);
 		SetPivotSmart(self, Pivot.y, 1, true, false);
 
