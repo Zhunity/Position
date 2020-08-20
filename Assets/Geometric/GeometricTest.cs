@@ -7,7 +7,7 @@ public class GeometricTest : MonoBehaviour
 	public RectTransform parent;
 	public RectTransform self;
 	public RectTransform anchor;
-	public RectTransform sizeDelta;
+	public RectTransform anchorPivot;
 
 	public Vector2 AnchorMax;
 	public Vector2 AnchorMin;
@@ -32,6 +32,8 @@ public class GeometricTest : MonoBehaviour
 		SetAnchorSmart(self, AnchorMin.y, 1, false, true, true, false, false);
 		SetAnchorSmart(self, AnchorMax.x, 0, true, true, true, false, false);
 		SetAnchorSmart(self, AnchorMax.y, 1, true, true, true, false, false);
+
+		AnchorSceneGUI(self, parent);
 	}
 
 	public Vector3 anchorPosition;
@@ -194,5 +196,33 @@ public class GeometricTest : MonoBehaviour
 	}
 
 	static float Round(float value) { return Mathf.Floor(0.5f + value); }
+	#endregion
+
+	#region AnchorPos
+	void AnchorSceneGUI(RectTransform gui, RectTransform guiParent)
+	{
+		var anchorMaxPos = GetAnchorLocal(guiParent, gui.anchorMax);
+		var anchorMinPos = GetAnchorLocal(guiParent, gui.anchorMin);
+		anchorMaxPos = guiParent.TransformPoint(anchorMaxPos);
+		anchorMinPos = guiParent.TransformPoint(anchorMinPos);
+		Rect rect = new Rect(anchorMinPos, anchorMaxPos - anchorMinPos);
+		Vector2 pivotPos = NormalizedToPointUnclamped(rect, gui.pivot);
+		anchor.position = pivotPos;
+		anchor.sizeDelta = rect.size;
+		anchorPivot.localPosition = Vector3.zero;
+	}
+
+	Vector3 GetAnchorLocal(RectTransform guiParent, Vector2 anchor)
+	{
+		return NormalizedToPointUnclamped(guiParent.rect, anchor);
+	}
+
+	static Vector2 NormalizedToPointUnclamped(Rect rectangle, Vector2 normalizedRectCoordinates)
+	{
+		return new Vector2(
+			Mathf.LerpUnclamped(rectangle.x, rectangle.xMax, normalizedRectCoordinates.x),
+			Mathf.LerpUnclamped(rectangle.y, rectangle.yMax, normalizedRectCoordinates.y)
+		);
+	}
 	#endregion
 }
